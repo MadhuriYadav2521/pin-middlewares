@@ -12,7 +12,7 @@ export const checksForRegister = async (req, res, next) => {   //number : Number
         if (!number) return res.send("number is requierd! in middleware");
         if (!address) return res.send("address is requierd! in middleware");
         if (!panCard) return res.send("Pan card number is requierd! in middleware");
-        if (!panCard) return res.send("pin is requierd! in middleware");
+        if (!pin) return res.send("pin is requierd! in middleware");
         if (password.length <= 8) {
             return res.send("User Password length is less than 8 !")
         }
