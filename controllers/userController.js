@@ -18,11 +18,35 @@ export const register = async (req, res) => {
         return res.send(error)
     }
 }
+export const login = async (req, res) => {
+    try {
+        const { email, password } = req.body;
+        if (!email) return res.send("email is required.")
+        if (!password) return res.send("password is required.")
+        const user = await Users.find({ email }).exec();
+        var secretkey = 'ios';
+        console.log(user[0].password);
+        var decipherPassword = encrypt.decrypt(user[0].password, secretkey, 256)
+        if (user.length) {
+            if (decipherPassword === password) {
+                return res.send("your are logged in.")
+            } else {
+                return res.send("wrong credentials.")
+            }
+        } else {
+
+            return res.send("user not found")
+        }
+
+    } catch (error) {
+        return res.send(error);
+    }
+}
 
 export const changeNumber = async (req, res) => {
     try {
-        const { number ,id,pin} = req.body;
-        if(!number) return res.send("number is required.")
+        const { number, id, pin } = req.body;
+        if (!number) return res.send("number is required.")
         const changeNum = await Users.findByIdAndUpdate({ _id: id, pin }, { number });
         await changeNum.save();
         return res.send("number changed.")
@@ -37,8 +61,8 @@ export const changeNumber = async (req, res) => {
 
 export const changeEmail = async (req, res) => {
     try {
-        const { email ,id,pin} = req.body;
-        if(!email) return res.send("email is required.")
+        const { email, id, pin } = req.body;
+        if (!email) return res.send("email is required.")
         const changeEmail = await Users.findByIdAndUpdate({ _id: id, pin }, { email });
         await changeEmail.save();
         return res.send("email changed.")
@@ -53,8 +77,8 @@ export const changeEmail = async (req, res) => {
 
 export const changeAddress = async (req, res) => {
     try {
-        const { address ,id,pin} = req.body;
-        if(!address) return res.send("Address is required.")
+        const { address, id, pin } = req.body;
+        if (!address) return res.send("Address is required.")
         const changeAddress = await Users.findByIdAndUpdate({ _id: id, pin }, { address });
         await changeAddress.save();
         return res.send("Address changed.")
@@ -69,8 +93,8 @@ export const changeAddress = async (req, res) => {
 
 export const changePanCardNum = async (req, res) => {
     try {
-        const { panCard ,id,pin} = req.body;
-        if(!panCard) return res.send("Pan card number is required.")
+        const { panCard, id, pin } = req.body;
+        if (!panCard) return res.send("Pan card number is required.")
         const changePanCardNum = await Users.findByIdAndUpdate({ _id: id, pin }, { panCard });
         await changePanCardNum.save();
         return res.send("Pan card number changed.")
